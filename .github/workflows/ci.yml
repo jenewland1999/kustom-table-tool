@@ -14,3 +14,5 @@ jobs:
 
       - run: bun install
       - run: bun validate
+        env:
+          SKIP_ENV_VALIDATION: true
