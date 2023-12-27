@@ -1,27 +1,54 @@
 {
   "name": "kustom-table-tool",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
+    "db:push": "drizzle-kit push:mysql",
+    "db:studio": "drizzle-kit studio",
+    "dev": "next dev",
+    "fmt": "prettier -w .",
+    "lint": "next lint",
     "start": "next start",
-    "lint": "next lint"
+    "validate": "prettier -c . && tsc && next lint"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.0.4"
+    "@clerk/nextjs": "^4.29.1",
+    "@planetscale/database": "^1.13.0",
+    "@t3-oss/env-nextjs": "^0.7.1",
+    "drizzle-orm": "^0.29.2",
+    "geist": "^1.2.0",
+    "next": "14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "server-only": "^0.0.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@next/eslint-plugin-next": "^14.0.4",
+    "@total-typescript/ts-reset": "^0.5.1",
+    "@types/eslint": "^8.56.0",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@typescript-eslint/eslint-plugin": "^6.16.0",
+    "@typescript-eslint/parser": "^6.16.0",
     "autoprefixer": "^10.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.4"
-  }
+    "drizzle-kit": "^0.20.9",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "14.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "mysql2": "^3.6.5",
+    "postcss": "^8.4.32",
+    "prettier": "^3.1.1",
+    "prettier-plugin-tailwindcss": "^0.5.9",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "engineStrict": true,
+  "packageManager": "bun@1.0.20"
 }
