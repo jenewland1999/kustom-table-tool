@@ -7,7 +7,14 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
+    AUTHORIZED_USERS: z.string(),
     CLERK_SECRET_KEY: z.string(),
+    CS_CART_API_PASSWORD: z.string(),
+    CS_CART_API_URL: z.string().url(),
+    CS_CART_API_USERNAME: z.string(),
+    DATABASE_HOST: z.string(),
+    DATABASE_USERNAME: z.string(),
+    DATABASE_PASSWORD: z.string(),
     DATABASE_URL: z
       .string()
       .url()
@@ -35,10 +42,16 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    AUTHORIZED_USERS: process.env.AUTHORIZED_USERS,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    CS_CART_API_PASSWORD: process.env.CS_CART_API_PASSWORD,
+    CS_CART_API_URL: process.env.CS_CART_API_URL,
+    CS_CART_API_USERNAME: process.env.CS_CART_API_USERNAME,
+    DATABASE_HOST: process.env.DATABASE_HOST,
+    DATABASE_USERNAME: process.env.DATABASE_USERNAME,
+    DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
   },

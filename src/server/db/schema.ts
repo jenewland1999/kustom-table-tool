@@ -1,9 +1,13 @@
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import {
-  bigint,
+  decimal,
   index,
+  int,
+  mysqlEnum,
   mysqlTableCreator,
+  primaryKey,
   timestamp,
+  tinyint,
   varchar,
 } from 'drizzle-orm/mysql-core';
 
@@ -15,19 +19,66 @@ import {
  */
 export const mysqlTable = mysqlTableCreator((name) => `table-tool_${name}`);
 
-export const posts = mysqlTable(
-  'post',
+export const comparisons = mysqlTable('comparisons', {
+  id: int('id').primaryKey().autoincrement(),
+  name: varchar('name', { length: 256 }).notNull(),
+  type: mysqlEnum('type', ['cpu', 'gpu']).notNull(),
+  createdAt: timestamp('created_at')
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp('updated_at').onUpdateNow(),
+});
+
+export const comparisonsRelations = relations(comparisons, ({ many }) => ({
+  comparisonsToProducts: many(comparisonsToProducts),
+}));
+
+export const products = mysqlTable(
+  'products',
   {
-    id: bigint('id', { mode: 'number' }).primaryKey().autoincrement(),
-    name: varchar('name', { length: 256 }),
-    createdById: varchar('createdById', { length: 255 }).notNull(),
-    createdAt: timestamp('createdAt')
+    id: int('id').primaryKey().autoincrement(),
+    code: varchar('code', { length: 256 }).notNull().unique(),
+    type: mysqlEnum('type', ['cpu', 'gpu']).notNull(),
+    score: int('score', { unsigned: true }),
+    cores: tinyint('cores', { unsigned: true }),
+    price: decimal('price'),
+    createdAt: timestamp('created_at')
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp('updatedAt').onUpdateNow(),
+    updatedAt: timestamp('updated_at').onUpdateNow(),
   },
-  (example) => ({
-    createdByIdIdx: index('createdById_idx').on(example.createdById),
-    nameIndex: index('name_idx').on(example.name),
+  (table) => ({
+    codeIndex: index('code_idx').on(table.code),
+  }),
+);
+
+export const productsRelations = relations(products, ({ many }) => ({
+  comparisonsToProducts: many(comparisonsToProducts),
+}));
+
+export const comparisonsToProducts = mysqlTable(
+  'comparisons_to_products',
+  {
+    comparisonId: int('comparison_id'),
+    productId: int('product_id'),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.comparisonId, table.productId] }),
+    };
+  },
+);
+
+export const comparisonsToProductsRelations = relations(
+  comparisonsToProducts,
+  ({ one }) => ({
+    comparison: one(comparisons, {
+      fields: [comparisonsToProducts.comparisonId],
+      references: [comparisons.id],
+    }),
+    product: one(products, {
+      fields: [comparisonsToProducts.productId],
+      references: [products.id],
+    }),
   }),
 );
