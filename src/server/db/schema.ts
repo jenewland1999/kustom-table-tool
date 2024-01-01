@@ -1,5 +1,6 @@
 import { relations, sql } from 'drizzle-orm';
 import {
+  boolean,
   decimal,
   index,
   int,
@@ -8,6 +9,7 @@ import {
   primaryKey,
   timestamp,
   tinyint,
+  unique,
   varchar,
 } from 'drizzle-orm/mysql-core';
 
@@ -38,10 +40,11 @@ export const products = mysqlTable(
   {
     id: int('id').primaryKey().autoincrement(),
     code: varchar('code', { length: 256 }).notNull().unique(),
+    name: varchar('name', { length: 256 }),
     type: mysqlEnum('type', ['cpu', 'gpu']).notNull(),
     score: int('score', { unsigned: true }),
     cores: tinyint('cores', { unsigned: true }),
-    price: decimal('price'),
+    price: decimal('price', { precision: 10, scale: 2 }),
     createdAt: timestamp('created_at')
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -61,10 +64,12 @@ export const comparisonsToProducts = mysqlTable(
   {
     comparisonId: int('comparison_id'),
     productId: int('product_id'),
+    active: boolean('active'),
   },
-  (table) => {
+  (t) => {
     return {
-      pk: primaryKey({ columns: [table.comparisonId, table.productId] }),
+      pk: primaryKey({ columns: [t.comparisonId, t.productId] }),
+      unq: unique().on(t.comparisonId, t.active),
     };
   },
 );
