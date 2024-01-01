@@ -6,6 +6,8 @@ import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
 import { ClerkProvider, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
+import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeModeToggle } from '@/components/theme-mode-toggle';
 
 export const metadata: Metadata = {
   title: 'Kustom Table Tool',
@@ -26,26 +28,34 @@ export default function RootLayout({
           className={`font-sans text-slate-900 ${GeistMono.variable} ${GeistSans.variable}`}
         >
           <body className="flex min-h-dvh flex-col">
-            <header className="py-4 shadow">
-              <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between">
-                  <Link href="/">
-                    <span className="font-bold">Kustom</span>
-                    {' / '}
-                    <span className="text-slate-600">Table Tool</span>
-                  </Link>
-                  <UserButton afterSignOutUrl="/" />
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <header className="py-4 shadow">
+                <div className="container mx-auto px-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <Link href="/" className="mr-auto">
+                      <span className="font-bold">Kustom</span>
+                      {' / '}
+                      <span className="text-muted-foreground">Table Tool</span>
+                    </Link>
+                    <ThemeModeToggle />
+                    <UserButton afterSignOutUrl="/" />
+                  </div>
                 </div>
-              </div>
-            </header>
-            <main className="grow">{children}</main>
-            <footer className="py-5 shadow-inner">
-              <div className="container mx-auto px-4">
-                <div className="flex items-center">
-                  <p>&copy; {new Date().getFullYear()} Kustom PCs</p>
+              </header>
+              <main className="grow">{children}</main>
+              <footer className="py-5 shadow-inner">
+                <div className="container mx-auto px-4">
+                  <div className="flex items-center">
+                    <p>&copy; {new Date().getFullYear()} Kustom PCs</p>
+                  </div>
                 </div>
-              </div>
-            </footer>
+              </footer>
+            </ThemeProvider>
           </body>
         </html>
       </ClerkProvider>
