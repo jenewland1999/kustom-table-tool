@@ -15,8 +15,6 @@ export default async function Home() {
   return (
     <div className="container mx-auto px-4">
       <div className="my-4 flex flex-col items-start gap-8">
-        <p>Show list of existing comparisons and button to create new ones.</p>
-
         {cpuComparisons.length > 0 ? (
           <table className="text-left">
             <thead>
